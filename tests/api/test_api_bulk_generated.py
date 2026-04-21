@@ -17,24 +17,42 @@ def _build_api_case(case_number: int) -> dict:
         application_unit = "UA-Payments-Orchestrator"
         title = f"Validate beneficiary creation API flow {case_number:03}"
         operation = "create_beneficiary"
+        feature = "Banking Service APIs"
+        story = "Beneficiary API"
+        suite = "Beneficiary API"
     elif case_number <= 80:
         service_level_2 = "Transfers"
         application_unit = "UA-Payments-Orchestrator"
         title = f"Validate domestic transfer API flow {case_number:03}"
         operation = "create_transfer"
+        feature = "Banking Service APIs"
+        story = "Transfer API"
+        suite = "Payments API"
     elif case_number <= 110:
         service_level_2 = "Card Management"
         application_unit = "UA-Card-Control-Service"
         title = f"Validate card control API flow {case_number:03}"
         operation = "update_card_status"
+        feature = "Banking Service APIs"
+        story = "Card Control API"
+        suite = "Card Control API"
     else:
         service_level_2 = "Statements"
         application_unit = "UA-Statement-Service"
         title = f"Validate statement generation API flow {case_number:03}"
         operation = "generate_statement"
+        feature = "Banking Service APIs"
+        story = "Statement API"
+        suite = "Statement API"
 
     release = "33.3.1" if case_number <= 60 else "33.3.2"
-    severity = "Critical" if case_number % 10 == 0 else "Major"
+
+    if case_number % 10 == 0:
+        severity = "Critical"
+    elif case_number % 3 == 0:
+        severity = "Major"
+    else:
+        severity = "Minor"
 
     tags = ["full", "regress", "smoke"]
 
@@ -45,6 +63,10 @@ def _build_api_case(case_number: int) -> dict:
         "case_number": case_number,
         "title": title,
         "operation": operation,
+        "epic": "Retail Banking",
+        "feature": feature,
+        "story": story,
+        "suite": suite,
         "business_unit": "Retail Banking",
         "service_level_1": "Daily Banking",
         "service_level_2": service_level_2,
@@ -119,6 +141,10 @@ def _attach_api_artifacts(case_data: dict) -> None:
 def _make_api_test(case_data: dict):
     def test_func():
         allure.dynamic.title(case_data["title"])
+        allure.dynamic.epic(case_data["epic"])
+        allure.dynamic.feature(case_data["feature"])
+        allure.dynamic.story(case_data["story"])
+        allure.dynamic.suite(case_data["suite"])
         allure.dynamic.label("layer", "api")
         allure.dynamic.label("Business Unit", case_data["business_unit"])
         allure.dynamic.label("Service Level 1", case_data["service_level_1"])

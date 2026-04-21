@@ -23,41 +23,62 @@ def _build_manual_case(case_number: int) -> dict:
         application_unit = "UA-Statement-Service"
         title = f"Validate statement evidence package {case_number:03}"
         scenario = "statement_evidence"
+        feature = "Acceptance Evidence"
+        story = "Statement Evidence Pack"
+        suite = "Statement Evidence Validation"
     elif case_number <= 8:
         service_level_2 = "Transfers"
         application_unit = "UA-Digital-Banking-Portal"
         title = f"Validate transfer evidence package {case_number:03}"
         scenario = "transfer_evidence"
+        feature = "Acceptance Evidence"
+        story = "Transfer Evidence Pack"
+        suite = "Transfer Evidence Validation"
     elif case_number <= 12:
         service_level_2 = "Beneficiaries"
         application_unit = "UA-Digital-Banking-Portal"
         title = f"Validate beneficiary evidence package {case_number:03}"
         scenario = "beneficiary_evidence"
+        feature = "Acceptance Evidence"
+        story = "Beneficiary Evidence Pack"
+        suite = "Beneficiary Evidence Validation"
     else:
         service_level_2 = "Card Management"
         application_unit = "UA-Card-Control-Service"
         title = f"Validate card-control evidence package {case_number:03}"
         scenario = "card_control_evidence"
+        feature = "Acceptance Evidence"
+        story = "Card Control Evidence Pack"
+        suite = "Card Control Evidence Validation"
 
     release = "33.3.1" if case_number <= 7 else "33.3.2"
-    severity = "Major" if case_number % 3 else "Critical"
 
-    tags = ["full"]
+    if case_number % 10 == 0:
+        severity = "Critical"
+    elif case_number % 3 == 0:
+        severity = "Major"
+    else:
+        severity = "Minor"
+
+    tags = ["full", "manual-as-code", "evidence-pack"]
     if case_number <= 2:
         tags.append("regress")
-    if case_number <= 2:
         tags.append("smoke")
     if case_number <= 5:
         tags.append("acceptance")
 
     attach_text = True
     attach_csv = case_number <= 10
-    attach_png = case_number <= 5
+    attach_png = case_number <= 8
 
     return {
         "case_number": case_number,
         "title": title,
         "scenario": scenario,
+        "epic": "Retail Banking",
+        "feature": feature,
+        "story": story,
+        "suite": suite,
         "business_unit": "Retail Banking",
         "service_level_1": "Daily Banking",
         "service_level_2": service_level_2,
@@ -81,6 +102,7 @@ def _attach_manual_artifacts(case_data: dict) -> None:
                 f"Scenario: {case_data['scenario']}\n"
                 f"Application Unit: {case_data['application_unit']}\n"
                 f"Release: {case_data['release']}\n"
+                f"Severity: {case_data['severity']}\n"
             ),
             name=f"manual_evidence_{case_number:03}.txt",
             attachment_type=allure.attachment_type.TEXT,
@@ -108,7 +130,11 @@ def _attach_manual_artifacts(case_data: dict) -> None:
 def _make_manual_test(case_data: dict):
     def test_func():
         allure.dynamic.title(case_data["title"])
-        allure.dynamic.label("layer", "ui")
+        allure.dynamic.epic(case_data["epic"])
+        allure.dynamic.feature(case_data["feature"])
+        allure.dynamic.story(case_data["story"])
+        allure.dynamic.suite(case_data["suite"])
+        allure.dynamic.label("layer", "e2e")
         allure.dynamic.label("Business Unit", case_data["business_unit"])
         allure.dynamic.label("Service Level 1", case_data["service_level_1"])
         allure.dynamic.label("Service Level 2", case_data["service_level_2"])

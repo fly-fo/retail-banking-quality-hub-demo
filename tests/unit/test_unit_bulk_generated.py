@@ -1,5 +1,4 @@
 import allure
-from pathlib import Path
 
 
 def _sanitize_name(value: str) -> str:
@@ -16,25 +15,39 @@ def _build_unit_case(case_number: int) -> dict:
         service_level_2 = "Transfers"
         application_unit = "UA-Payments-Orchestrator"
         title = f"Validate domestic transfer calculation rule {case_number:03}"
+        feature = "Core Banking Rules"
+        story = "Transfer Rules"
+        suite = "Payments Calculation Engine"
     elif case_number <= 60:
         service_level_2 = "Beneficiaries"
         application_unit = "UA-Payments-Orchestrator"
         title = f"Validate beneficiary validation rule {case_number:03}"
+        feature = "Core Banking Rules"
+        story = "Beneficiary Rules"
+        suite = "Beneficiary Validation Engine"
     elif case_number <= 80:
         service_level_2 = "Card Management"
         application_unit = "UA-Card-Control-Service"
         title = f"Validate card control calculation rule {case_number:03}"
+        feature = "Core Banking Rules"
+        story = "Card Control Rules"
+        suite = "Card Rules Engine"
     else:
         service_level_2 = "Statements"
         application_unit = "UA-Statement-Service"
         title = f"Validate statement generation rule {case_number:03}"
+        feature = "Core Banking Rules"
+        story = "Statement Rules"
+        suite = "Statement Rules Engine"
 
-    if case_number <= 50:
-        release = "33.3.1"
+    release = "33.3.1" if case_number <= 50 else "33.3.2"
+
+    if case_number % 10 == 0:
+        severity = "Critical"
+    elif case_number % 3 == 0:
+        severity = "Major"
     else:
-        release = "33.3.2"
-
-    severity = "Critical" if case_number % 10 == 0 else "Major"
+        severity = "Minor"
 
     tags = ["full", "regress"]
     if case_number <= 30:
@@ -46,6 +59,10 @@ def _build_unit_case(case_number: int) -> dict:
     return {
         "case_number": case_number,
         "title": title,
+        "epic": "Retail Banking",
+        "feature": feature,
+        "story": story,
+        "suite": suite,
         "business_unit": "Retail Banking",
         "service_level_1": "Daily Banking",
         "service_level_2": service_level_2,
@@ -68,6 +85,7 @@ def _attach_unit_artifacts(case_data: dict) -> None:
                 f"Business unit: {case_data['business_unit']}\n"
                 f"Service: {case_data['service_level_2']}\n"
                 f"Release: {case_data['release']}\n"
+                f"Severity: {case_data['severity']}\n"
             ),
             name=f"unit_note_{case_number:03}.txt",
             attachment_type=allure.attachment_type.TEXT,
@@ -88,6 +106,10 @@ def _attach_unit_artifacts(case_data: dict) -> None:
 def _make_unit_test(case_data: dict):
     def test_func():
         allure.dynamic.title(case_data["title"])
+        allure.dynamic.epic(case_data["epic"])
+        allure.dynamic.feature(case_data["feature"])
+        allure.dynamic.story(case_data["story"])
+        allure.dynamic.suite(case_data["suite"])
         allure.dynamic.label("layer", "unit")
         allure.dynamic.label("Business Unit", case_data["business_unit"])
         allure.dynamic.label("Service Level 1", case_data["service_level_1"])

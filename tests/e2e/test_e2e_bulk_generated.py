@@ -23,38 +23,59 @@ def _build_e2e_case(case_number: int) -> dict:
         application_unit = "UA-Digital-Banking-Portal"
         title = f"Validate domestic transfer portal flow {case_number:03}"
         flow = "transfer"
+        feature = "Digital Banking Journeys"
+        story = "Domestic Transfer Journey"
+        suite = "Retail Portal Transfer Journey"
     elif case_number <= 55:
         service_level_2 = "Beneficiaries"
         application_unit = "UA-Digital-Banking-Portal"
         title = f"Validate beneficiary management portal flow {case_number:03}"
         flow = "beneficiary"
+        feature = "Digital Banking Journeys"
+        story = "Beneficiary Journey"
+        suite = "Retail Portal Beneficiary Journey"
     elif case_number <= 75:
         service_level_2 = "Card Management"
         application_unit = "UA-Digital-Banking-Portal"
         title = f"Validate card controls portal flow {case_number:03}"
         flow = "card_controls"
+        feature = "Digital Banking Journeys"
+        story = "Card Control Journey"
+        suite = "Retail Portal Card Control Journey"
     else:
         service_level_2 = "Statements"
         application_unit = "UA-Digital-Banking-Portal"
         title = f"Validate statements portal flow {case_number:03}"
         flow = "statements"
+        feature = "Digital Banking Journeys"
+        story = "Statement Download Journey"
+        suite = "Retail Portal Statement Journey"
 
     release = "33.3.1" if case_number <= 50 else "33.3.2"
-    severity = "Critical" if case_number % 8 == 0 else "Major"
+
+    if case_number % 10 == 0:
+        severity = "Critical"
+    elif case_number % 3 == 0:
+        severity = "Major"
+    else:
+        severity = "Minor"
 
     tags = ["full"]
     if case_number <= 20:
         tags.append("regress")
-    if case_number <= 20:
         tags.append("smoke")
 
-    attach_screenshot = case_number <= 20
+    attach_screenshot = case_number <= 30
     attach_note = case_number <= 30
 
     return {
         "case_number": case_number,
         "title": title,
         "flow": flow,
+        "epic": "Retail Banking",
+        "feature": feature,
+        "story": story,
+        "suite": suite,
         "business_unit": "Retail Banking",
         "service_level_1": "Daily Banking",
         "service_level_2": service_level_2,
@@ -73,19 +94,20 @@ def _attach_e2e_artifacts(case_data: dict) -> None:
     if case_data["attach_screenshot"]:
         allure.attach(
             base64.b64decode(_ONE_PIXEL_PNG),
-            name=f"ui_screenshot_{case_number:03}.png",
+            name=f"e2e_screenshot_{case_number:03}.png",
             attachment_type=allure.attachment_type.PNG,
         )
 
     if case_data["attach_note"]:
         allure.attach(
             (
-                f"Validated UI evidence for case {case_number:03}\n"
+                f"Validated E2E evidence for case {case_number:03}\n"
                 f"Flow: {case_data['flow']}\n"
                 f"Application Unit: {case_data['application_unit']}\n"
                 f"Release: {case_data['release']}\n"
+                f"Severity: {case_data['severity']}\n"
             ),
-            name=f"ui_note_{case_number:03}.txt",
+            name=f"e2e_note_{case_number:03}.txt",
             attachment_type=allure.attachment_type.TEXT,
         )
 
@@ -93,7 +115,11 @@ def _attach_e2e_artifacts(case_data: dict) -> None:
 def _make_e2e_test(case_data: dict):
     def test_func():
         allure.dynamic.title(case_data["title"])
-        allure.dynamic.label("layer", "ui")
+        allure.dynamic.epic(case_data["epic"])
+        allure.dynamic.feature(case_data["feature"])
+        allure.dynamic.story(case_data["story"])
+        allure.dynamic.suite(case_data["suite"])
+        allure.dynamic.label("layer", "e2e")
         allure.dynamic.label("Business Unit", case_data["business_unit"])
         allure.dynamic.label("Service Level 1", case_data["service_level_1"])
         allure.dynamic.label("Service Level 2", case_data["service_level_2"])
