@@ -108,6 +108,7 @@ def _attach_manual_artifacts(case_data: dict) -> None:
 
 
 def _make_manual_test(case_data: dict):
+    @allure.manual
     def test_func():
         allure.dynamic.title(case_data["title"])
         allure.dynamic.epic(case_data["epic"])
