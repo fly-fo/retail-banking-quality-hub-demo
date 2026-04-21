@@ -3,49 +3,44 @@ import json
 
 
 def _sanitize_name(value: str) -> str:
-    return (
-        value.lower()
-        .replace(" ", "_")
-        .replace("/", "_")
-        .replace("-", "_")
-    )
+    return value.lower().replace(" ", "_").replace("/", "_").replace("-", "_")
 
 
 def _build_api_case(case_number: int) -> dict:
-    if case_number <= 40:
-        service_level_2 = "Beneficiaries"
-        application_unit = "UA-Payments-Orchestrator"
-        title = f"Validate beneficiary creation API flow {case_number:03}"
-        operation = "create_beneficiary"
-        feature = "Banking Service APIs"
-        story = "Beneficiary API"
-        suite = "Beneficiary API"
-    elif case_number <= 80:
+    if case_number <= 41:
         service_level_2 = "Transfers"
         application_unit = "UA-Payments-Orchestrator"
-        title = f"Validate domestic transfer API flow {case_number:03}"
+        title = f"Validate transfer API flow {case_number:03}"
         operation = "create_transfer"
-        feature = "Banking Service APIs"
+        feature = "Payments"
         story = "Transfer API"
         suite = "Payments API"
-    elif case_number <= 110:
+    elif case_number <= 74:
+        service_level_2 = "Beneficiaries"
+        application_unit = "UA-Payments-Orchestrator"
+        title = f"Validate beneficiary API flow {case_number:03}"
+        operation = "create_beneficiary"
+        feature = "Beneficiaries"
+        story = "Beneficiary API"
+        suite = "Beneficiary API"
+    elif case_number <= 97:
         service_level_2 = "Card Management"
         application_unit = "UA-Card-Control-Service"
-        title = f"Validate card control API flow {case_number:03}"
+        title = f"Validate card API flow {case_number:03}"
         operation = "update_card_status"
-        feature = "Banking Service APIs"
-        story = "Card Control API"
+        feature = "Cards"
+        story = "Card API"
         suite = "Card Control API"
     else:
         service_level_2 = "Statements"
         application_unit = "UA-Statement-Service"
-        title = f"Validate statement generation API flow {case_number:03}"
+        title = f"Validate statement API flow {case_number:03}"
         operation = "generate_statement"
-        feature = "Banking Service APIs"
+        feature = "Statements"
         story = "Statement API"
         suite = "Statement API"
 
-    release = "33.3.1" if case_number <= 60 else "33.3.2"
+    release = "33.3.1" if case_number <= 58 else "33.3.2"
 
     if case_number % 10 == 0:
         severity = "Critical"
@@ -53,11 +48,6 @@ def _build_api_case(case_number: int) -> dict:
         severity = "Major"
     else:
         severity = "Minor"
-
-    tags = ["full", "regress", "smoke"]
-
-    attach_request = case_number <= 20
-    attach_response = case_number <= 30
 
     return {
         "case_number": case_number,
@@ -73,9 +63,9 @@ def _build_api_case(case_number: int) -> dict:
         "application_unit": application_unit,
         "release": release,
         "severity": severity,
-        "tags": tags,
-        "attach_request": attach_request,
-        "attach_response": attach_response,
+        "tags": ["full", "regress", "smoke"],
+        "attach_request": case_number <= 19,
+        "attach_response": case_number <= 31,
     }
 
 
@@ -102,7 +92,6 @@ def _build_request_payload(case_data: dict) -> dict:
             "cardId": f"CARD-{7000 + n}",
             "status": "BLOCKED" if n % 2 == 0 else "ACTIVE",
         }
-
     return {
         "customerId": f"RB-{10000 + n}",
         "statementMonth": "2026-03",
@@ -120,19 +109,16 @@ def _build_response_payload(case_data: dict) -> dict:
 
 
 def _attach_api_artifacts(case_data: dict) -> None:
-    request_payload = _build_request_payload(case_data)
-    response_payload = _build_response_payload(case_data)
-
     if case_data["attach_request"]:
         allure.attach(
-            json.dumps(request_payload, indent=2),
+            json.dumps(_build_request_payload(case_data), indent=2),
             name=f"api_request_{case_data['case_number']:03}.json",
             attachment_type=allure.attachment_type.JSON,
         )
 
     if case_data["attach_response"]:
         allure.attach(
-            json.dumps(response_payload, indent=2),
+            json.dumps(_build_response_payload(case_data), indent=2),
             name=f"api_response_{case_data['case_number']:03}.json",
             attachment_type=allure.attachment_type.JSON,
         )
@@ -156,22 +142,19 @@ def _make_api_test(case_data: dict):
         for tag in case_data["tags"]:
             allure.dynamic.tag(tag)
 
-        with allure.step("Prepare banking API request payload"):
+        with allure.step("Prepare API payload"):
             pass
 
-        with allure.step("Validate successful API response"):
+        with allure.step("Validate API response"):
             pass
 
         _attach_api_artifacts(case_data)
-
         assert True
 
-    safe_name = _sanitize_name(case_data["title"])
-    test_func.__name__ = f"test_{safe_name}_{case_data['case_number']:03}"
+    test_func.__name__ = f"test_{_sanitize_name(case_data['title'])}_{case_data['case_number']:03}"
     return test_func
 
 
 for _case_number in range(1, 121):
     _case_data = _build_api_case(_case_number)
-    _test = _make_api_test(_case_data)
-    globals()[_test.__name__] = _test
+    globals()[_make_api_test(_case_data).__name__] = _make_api_test(_case_data)

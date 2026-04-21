@@ -2,56 +2,50 @@ import allure
 import base64
 
 
-_ONE_PIXEL_PNG = (
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8"
-    "/x8AAusB9Wl8pKQAAAAASUVORK5CYII="
+_VISIBLE_PNG = (
+    "iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAAA9UlEQVR4nO3cUWrCQBRA0RlxlW5G3Ey3Of2TKAoVmyu053wlXzNcHiGEMHOtNdjf4dMb+C+EjggdETpyvLuf8/KRffxJa52v1yY6InTk/tFxtR17XvLw8WuiI0JHhI4IHRE6InTk6evdQ/Myd9rHGGOdNx9sv3ZcaJw2C833FvrxR2YTHRE6InRE6IjQEaEjQkeEjggdEToidEToiNARoSNCR4SOCB0ROiJ0ROiI0BGhI0JHhI4IHRE6InRE6IjQEaEjr/22e/Nn7a5O1ULV4Q4mOiJ0ROiI0BGhI0JHnr7eObjjd5noiNCR6dy7homOCB0ROvINoXUZ0tbAJf4AAAAASUVORK5CYII="
 )
 
 
 def _sanitize_name(value: str) -> str:
-    return (
-        value.lower()
-        .replace(" ", "_")
-        .replace("/", "_")
-        .replace("-", "_")
-    )
+    return value.lower().replace(" ", "_").replace("/", "_").replace("-", "_")
 
 
 def _build_e2e_case(case_number: int) -> dict:
-    if case_number <= 30:
+    if case_number <= 31:
         service_level_2 = "Transfers"
         application_unit = "UA-Digital-Banking-Portal"
-        title = f"Validate domestic transfer portal flow {case_number:03}"
+        title = f"Validate transfer portal flow {case_number:03}"
         flow = "transfer"
-        feature = "Digital Banking Journeys"
-        story = "Domestic Transfer Journey"
-        suite = "Retail Portal Transfer Journey"
-    elif case_number <= 55:
+        feature = "Portal Journeys"
+        story = "Transfer Journey"
+        suite = "Portal Journeys"
+    elif case_number <= 57:
         service_level_2 = "Beneficiaries"
         application_unit = "UA-Digital-Banking-Portal"
-        title = f"Validate beneficiary management portal flow {case_number:03}"
+        title = f"Validate beneficiary portal flow {case_number:03}"
         flow = "beneficiary"
-        feature = "Digital Banking Journeys"
+        feature = "Portal Journeys"
         story = "Beneficiary Journey"
-        suite = "Retail Portal Beneficiary Journey"
-    elif case_number <= 75:
+        suite = "Portal Journeys"
+    elif case_number <= 79:
         service_level_2 = "Card Management"
         application_unit = "UA-Digital-Banking-Portal"
-        title = f"Validate card controls portal flow {case_number:03}"
+        title = f"Validate card portal flow {case_number:03}"
         flow = "card_controls"
-        feature = "Digital Banking Journeys"
-        story = "Card Control Journey"
-        suite = "Retail Portal Card Control Journey"
+        feature = "Portal Journeys"
+        story = "Card Journey"
+        suite = "Portal Journeys"
     else:
         service_level_2 = "Statements"
         application_unit = "UA-Digital-Banking-Portal"
-        title = f"Validate statements portal flow {case_number:03}"
+        title = f"Validate statement portal flow {case_number:03}"
         flow = "statements"
-        feature = "Digital Banking Journeys"
-        story = "Statement Download Journey"
-        suite = "Retail Portal Statement Journey"
+        feature = "Portal Journeys"
+        story = "Statement Journey"
+        suite = "Portal Journeys"
 
-    release = "33.3.1" if case_number <= 50 else "33.3.2"
+    release = "33.3.1" if case_number <= 44 else "33.3.2"
 
     if case_number % 10 == 0:
         severity = "Critical"
@@ -61,12 +55,8 @@ def _build_e2e_case(case_number: int) -> dict:
         severity = "Minor"
 
     tags = ["full"]
-    if case_number <= 20:
-        tags.append("regress")
-        tags.append("smoke")
-
-    attach_screenshot = case_number <= 30
-    attach_note = case_number <= 30
+    if case_number <= 19:
+        tags += ["regress", "smoke"]
 
     return {
         "case_number": case_number,
@@ -83,31 +73,30 @@ def _build_e2e_case(case_number: int) -> dict:
         "release": release,
         "severity": severity,
         "tags": tags,
-        "attach_screenshot": attach_screenshot,
-        "attach_note": attach_note,
+        "attach_screenshot": case_number <= 30,
+        "attach_note": case_number <= 30,
     }
 
 
 def _attach_e2e_artifacts(case_data: dict) -> None:
-    case_number = case_data["case_number"]
+    n = case_data["case_number"]
 
     if case_data["attach_screenshot"]:
         allure.attach(
-            base64.b64decode(_ONE_PIXEL_PNG),
-            name=f"e2e_screenshot_{case_number:03}.png",
+            base64.b64decode(_VISIBLE_PNG),
+            name=f"e2e_screenshot_{n:03}.png",
             attachment_type=allure.attachment_type.PNG,
         )
 
     if case_data["attach_note"]:
         allure.attach(
             (
-                f"Validated E2E evidence for case {case_number:03}\n"
+                f"E2E evidence for case {n:03}\n"
                 f"Flow: {case_data['flow']}\n"
-                f"Application Unit: {case_data['application_unit']}\n"
                 f"Release: {case_data['release']}\n"
                 f"Severity: {case_data['severity']}\n"
             ),
-            name=f"e2e_note_{case_number:03}.txt",
+            name=f"e2e_note_{n:03}.txt",
             attachment_type=allure.attachment_type.TEXT,
         )
 
@@ -130,22 +119,19 @@ def _make_e2e_test(case_data: dict):
         for tag in case_data["tags"]:
             allure.dynamic.tag(tag)
 
-        with allure.step("Open digital banking flow and prepare state"):
+        with allure.step("Open portal flow"):
             pass
 
-        with allure.step("Validate end-to-end customer journey result"):
+        with allure.step("Validate customer journey result"):
             pass
 
         _attach_e2e_artifacts(case_data)
-
         assert True
 
-    safe_name = _sanitize_name(case_data["title"])
-    test_func.__name__ = f"test_{safe_name}_{case_data['case_number']:03}"
+    test_func.__name__ = f"test_{_sanitize_name(case_data['title'])}_{case_data['case_number']:03}"
     return test_func
 
 
 for _case_number in range(1, 101):
     _case_data = _build_e2e_case(_case_number)
-    _test = _make_e2e_test(_case_data)
-    globals()[_test.__name__] = _test
+    globals()[_make_e2e_test(_case_data).__name__] = _make_e2e_test(_case_data)
