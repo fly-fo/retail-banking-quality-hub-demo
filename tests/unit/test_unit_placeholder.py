@@ -11,4 +11,17 @@ import allure
 @allure.label("Release", "33.3.1")
 @allure.label("Severity", "Major")
 def test_unit_placeholder():
+    allure.attach(
+        "Validated transfer amount calculation for retail domestic transfer.",
+        name="calculation-note",
+        attachment_type=allure.attachment_type.TEXT,
+    )
+
+    csv_content = "amount,fee,total\n1000,5,1005\n"
+    allure.attach(
+        csv_content,
+        name="transfer-calculation.csv",
+        attachment_type=allure.attachment_type.CSV,
+    )
+
     assert True
