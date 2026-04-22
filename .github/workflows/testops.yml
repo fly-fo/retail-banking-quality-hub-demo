@@ -24,7 +24,7 @@ on:
       TEST_PATH:
         description: Test path to run
         required: false
-        default: tests
+        default: tests/unit
 
 env:
   ALLURE_ENDPOINT: https://demo.testops.cloud
