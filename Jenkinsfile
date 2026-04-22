@@ -13,11 +13,10 @@ pipeline {
         stage('Setup Python env') {
             steps {
                 sh '''
-                    python3 --version || python --version
-                    python3 -m venv .venv || python -m venv .venv
-                    . .venv/bin/activate
-                    python -m pip install --upgrade pip
-                    pip install -r requirements.txt
+                    python3 --version
+                    python3 -m pip --version || python3 -m ensurepip --upgrade || true
+                    python3 -m pip install --upgrade pip --user || true
+                    python3 -m pip install -r requirements.txt --user || python3 -m pip install -r requirements.txt --break-system-packages --user
                 '''
             }
         }
@@ -34,8 +33,8 @@ pipeline {
                     results: [[path: 'allure-results']]
                 ) {
                     sh '''
-                        . .venv/bin/activate
-                        pytest tests/api tests/e2e tests/manual --alluredir=allure-results
+                        export PATH="$HOME/.local/bin:$PATH"
+                        python3 -m pytest tests/api tests/e2e tests/manual --alluredir=allure-results
                     '''
                 }
             }
