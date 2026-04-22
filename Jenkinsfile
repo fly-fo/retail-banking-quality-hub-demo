@@ -4,10 +4,8 @@ pipeline {
     }
 
     parameters {
-        string(name: 'BROWSER', defaultValue: 'Chrome', description: '')
-        string(name: 'OS', defaultValue: 'Linux', description: '')
-        string(name: 'RELEASE', defaultValue: '33.3.1', description: '')
-
+        string(name: 'TEST_PATH', defaultValue: 'tests/api tests/e2e tests/manual', description: 'Paths to run')
+        string(name: 'LAUNCH_TAGS', defaultValue: 'jenkins, api, e2e, manual', description: 'Launch tags')
     }
 
     stages {
@@ -35,13 +33,13 @@ pipeline {
                     name: "${JOB_NAME} - #${BUILD_NUMBER}",
                     projectId: '4601',
                     serverId: '4601@Demo.testops.cloud',
-                    tags: 'jenkins, api, e2e, manual',
+                    tags: "${params.LAUNCH_TAGS}",
                     indexExistingFiles: true,
                     results: [[path: 'allure-results']]
                 ) {
                     sh '''
                         export PATH="$HOME/.local/bin:$PATH"
-                        python3 -m pytest tests/api tests/e2e tests/manual --alluredir=allure-results
+                        python3 -m pytest ${TEST_PATH} --alluredir=allure-results
                     '''
                 }
             }
