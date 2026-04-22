@@ -33,6 +33,7 @@ env:
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
   ALLURE_RESULTS: allure-results
   ALLURE_LAUNCH_NAME: retail-banking-quality-hub-demo
+  ALLURE_LAUNCH_TAGS: unit, github
 
 jobs:
   all-tests:
