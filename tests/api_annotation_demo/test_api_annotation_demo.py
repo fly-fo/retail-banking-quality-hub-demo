@@ -1,7 +1,7 @@
 import allure
 
 
-@allure.id("30001")
+@allure.id("21453")
 @allure.title("Validate beneficiary creation API request")
 @allure.epic("Retail Banking")
 @allure.feature("Beneficiaries")
@@ -23,7 +23,7 @@ def test_beneficiary_creation_001():
     assert True
 
 
-@allure.id("30002")
+@allure.id("21451")
 @allure.title("Validate domestic transfer API request")
 @allure.epic("Retail Banking")
 @allure.feature("Payments")
@@ -45,7 +45,7 @@ def test_domestic_transfer_002():
     assert True
 
 
-@allure.id("30003")
+@allure.id("21458")
 @allure.title("Validate card status update API request")
 @allure.epic("Retail Banking")
 @allure.feature("Cards")
@@ -67,7 +67,7 @@ def test_card_status_update_003():
     assert True
 
 
-@allure.id("30004")
+@allure.id("21452")
 @allure.title("Validate statement generation API request")
 @allure.epic("Retail Banking")
 @allure.feature("Statements")
@@ -89,7 +89,7 @@ def test_statement_generation_004():
     assert True
 
 
-@allure.id("30005")
+@allure.id("21450")
 @allure.title("Validate transfer review API request")
 @allure.epic("Retail Banking")
 @allure.feature("Payments")

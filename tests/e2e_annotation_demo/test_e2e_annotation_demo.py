@@ -1,7 +1,7 @@
 import allure
 
 
-@allure.id("30101")
+@allure.id("21454")
 @allure.title("Validate domestic transfer portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
@@ -25,7 +25,7 @@ def test_transfer_portal_001():
     assert True
 
 
-@allure.id("30102")
+@allure.id("21457")
 @allure.title("Validate beneficiary creation portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
@@ -49,7 +49,7 @@ def test_beneficiary_portal_002():
     assert True
 
 
-@allure.id("30103")
+@allure.id("21459")
 @allure.title("Validate card control portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
@@ -73,7 +73,7 @@ def test_card_portal_003():
     assert True
 
 
-@allure.id("30104")
+@allure.id("21455")
 @allure.title("Validate statement download portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
@@ -97,7 +97,7 @@ def test_statement_portal_004():
     assert True
 
 
-@allure.id("30105")
+@allure.id("21456")
 @allure.title("Validate transfer confirmation portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
