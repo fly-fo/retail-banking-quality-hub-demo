@@ -1,14 +1,21 @@
 import allure
 
 
+@allure.id("30101")
 @allure.title("Validate domestic transfer portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
 @allure.story("Transfer Journey")
 @allure.suite("Portal Journeys")
 @allure.tag("annotation-demo", "annotated", "e2e")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_transfer_portal_annotated_001():
+def test_transfer_portal_001():
+    allure.dynamic.severity(allure.severity_level.CRITICAL)
+    allure.dynamic.label("owner", "team-banking")
+    allure.dynamic.label("Business Unit", "Retail Banking")
+    allure.dynamic.label("Service Level 1", "Daily Banking")
+    allure.dynamic.label("Service Level 2", "Transfers")
+    allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
+
     with allure.step("Open transfer page"):
         pass
     with allure.step("Enter valid transfer data"):
@@ -18,14 +25,21 @@ def test_transfer_portal_annotated_001():
     assert True
 
 
+@allure.id("30102")
 @allure.title("Validate beneficiary creation portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
 @allure.story("Beneficiary Journey")
 @allure.suite("Portal Journeys")
 @allure.tag("annotation-demo", "annotated", "e2e")
-@allure.severity(allure.severity_level.CRITICAL)
-def test_beneficiary_portal_annotated_002():
+def test_beneficiary_portal_002():
+    allure.dynamic.severity(allure.severity_level.CRITICAL)
+    allure.dynamic.label("owner", "team-banking")
+    allure.dynamic.label("Business Unit", "Retail Banking")
+    allure.dynamic.label("Service Level 1", "Daily Banking")
+    allure.dynamic.label("Service Level 2", "Beneficiaries")
+    allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
+
     with allure.step("Open beneficiary page"):
         pass
     with allure.step("Create beneficiary with valid data"):
@@ -35,14 +49,21 @@ def test_beneficiary_portal_annotated_002():
     assert True
 
 
+@allure.id("30103")
 @allure.title("Validate card control portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
 @allure.story("Card Journey")
 @allure.suite("Portal Journeys")
 @allure.tag("annotation-demo", "annotated", "e2e")
-@allure.severity(allure.severity_level.NORMAL)
-def test_card_portal_annotated_003():
+def test_card_portal_003():
+    allure.dynamic.severity(allure.severity_level.NORMAL)
+    allure.dynamic.label("owner", "team-banking")
+    allure.dynamic.label("Business Unit", "Retail Banking")
+    allure.dynamic.label("Service Level 1", "Daily Banking")
+    allure.dynamic.label("Service Level 2", "Cards")
+    allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
+
     with allure.step("Open card controls"):
         pass
     with allure.step("Block or unblock debit card"):
@@ -52,14 +73,21 @@ def test_card_portal_annotated_003():
     assert True
 
 
+@allure.id("30104")
 @allure.title("Validate statement download portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
 @allure.story("Statement Journey")
 @allure.suite("Portal Journeys")
 @allure.tag("annotation-demo", "annotated", "e2e")
-@allure.severity(allure.severity_level.NORMAL)
-def test_statement_portal_annotated_004():
+def test_statement_portal_004():
+    allure.dynamic.severity(allure.severity_level.NORMAL)
+    allure.dynamic.label("owner", "team-banking")
+    allure.dynamic.label("Business Unit", "Retail Banking")
+    allure.dynamic.label("Service Level 1", "Daily Banking")
+    allure.dynamic.label("Service Level 2", "Statements")
+    allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
+
     with allure.step("Open statements page"):
         pass
     with allure.step("Download monthly statement"):
@@ -69,14 +97,21 @@ def test_statement_portal_annotated_004():
     assert True
 
 
+@allure.id("30105")
 @allure.title("Validate transfer confirmation portal journey")
 @allure.epic("Retail Banking")
 @allure.feature("Portal Journeys")
 @allure.story("Transfer Journey")
 @allure.suite("Portal Journeys")
 @allure.tag("annotation-demo", "annotated", "e2e")
-@allure.severity(allure.severity_level.MINOR)
-def test_transfer_confirmation_annotated_005():
+def test_transfer_confirmation_005():
+    allure.dynamic.severity(allure.severity_level.MINOR)
+    allure.dynamic.label("owner", "team-banking")
+    allure.dynamic.label("Business Unit", "Retail Banking")
+    allure.dynamic.label("Service Level 1", "Daily Banking")
+    allure.dynamic.label("Service Level 2", "Transfers")
+    allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
+
     with allure.step("Submit transfer"):
         pass
     with allure.step("Open confirmation screen"):
