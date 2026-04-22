@@ -3,6 +3,11 @@ pipeline {
         label 'python'
     }
 
+    parameters {
+        string(name: 'BROWSER', defaultValue: 'Chrome', description: '')
+        string(name: 'OS', defaultValue: 'Linux', description: '')
+    }
+
     stages {
         stage('git pull') {
             steps {
