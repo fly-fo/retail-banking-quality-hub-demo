@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.11-slim'
+            args '-u root:root'
+        }
+    }
 
     environment {
         ALLURE_ENDPOINT = 'https://demo.testops.cloud'
@@ -19,11 +24,20 @@ pipeline {
         stage('Setup Python') {
             steps {
                 sh '''
-                    python3 --version || python --version
-                    python3 -m venv .venv || python -m venv .venv
+                    python --version
+                    python -m venv .venv
                     . .venv/bin/activate
                     python -m pip install --upgrade pip
                     pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Install curl') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y curl
                 '''
             }
         }
