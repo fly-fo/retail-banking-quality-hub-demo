@@ -2,7 +2,7 @@ import allure
 
 
 @allure.title("Validate domestic transfer portal journey")
-def test_transfer_portal_basic_001():
+def test_transfer_portal_plain_001():
     with allure.step("Open transfer page"):
         pass
     with allure.step("Enter valid transfer data"):
@@ -13,7 +13,7 @@ def test_transfer_portal_basic_001():
 
 
 @allure.title("Validate beneficiary creation portal journey")
-def test_beneficiary_portal_basic_002():
+def test_beneficiary_portal_plain_002():
     with allure.step("Open beneficiary page"):
         pass
     with allure.step("Create beneficiary with valid data"):
@@ -24,7 +24,7 @@ def test_beneficiary_portal_basic_002():
 
 
 @allure.title("Validate card control portal journey")
-def test_card_portal_basic_003():
+def test_card_portal_plain_003():
     with allure.step("Open card controls"):
         pass
     with allure.step("Block or unblock debit card"):
@@ -35,7 +35,7 @@ def test_card_portal_basic_003():
 
 
 @allure.title("Validate statement download portal journey")
-def test_statement_portal_basic_004():
+def test_statement_portal_plain_004():
     with allure.step("Open statements page"):
         pass
     with allure.step("Download monthly statement"):
@@ -46,7 +46,7 @@ def test_statement_portal_basic_004():
 
 
 @allure.title("Validate transfer confirmation portal journey")
-def test_transfer_confirmation_basic_005():
+def test_transfer_confirmation_plain_005():
     with allure.step("Submit transfer"):
         pass
     with allure.step("Open confirmation screen"):

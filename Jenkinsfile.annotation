@@ -4,8 +4,8 @@ pipeline {
     }
 
     parameters {
-        string(name: 'TEST_PATH', defaultValue: 'tests/api_basic tests/e2e_basic', description: 'Paths to run')
-        string(name: 'LAUNCH_TAGS', defaultValue: 'annotation-demo, basic, api, e2e', description: 'Launch tags')
+        string(name: 'TEST_PATH', defaultValue: 'tests/api_plain tests/e2e_plain', description: 'Paths to run')
+        string(name: 'LAUNCH_TAGS', defaultValue: 'annotation-demo, plain, api, e2e', description: 'Launch tags')
     }
 
     stages {
