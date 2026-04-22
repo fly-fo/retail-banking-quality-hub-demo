@@ -4,14 +4,17 @@ pipeline {
     }
 
     parameters {
-        string(name: 'TEST_PATH', defaultValue: 'tests/api_plain tests/e2e_plain', description: 'Paths to run')
-        string(name: 'LAUNCH_TAGS', defaultValue: 'annotation-demo, plain, api, e2e', description: 'Launch tags')
+        choice(
+            name: 'TESTS_BRANCH',
+            choices: ['main', 'annotation-demo'],
+            description: 'Choose plain or annotated branch'
+        )
     }
 
     stages {
         stage('git pull') {
             steps {
-                git branch: 'main', url: 'https://github.com/fly-fo/retail-banking-quality-hub-demo.git'
+                git branch: "${params.TESTS_BRANCH}", url: 'https://github.com/fly-fo/retail-banking-quality-hub-demo.git'
             }
         }
 
@@ -28,19 +31,25 @@ pipeline {
 
         stage('Run comparison tests and upload to Allure TestOps') {
             steps {
-                withAllureUpload(
-                    credentialsId: 'Amir-Demo.test.cloud',
-                    name: "${JOB_NAME} - #${BUILD_NUMBER}",
-                    projectId: '4601',
-                    serverId: '4601@Demo.testops.cloud',
-                    tags: "${params.LAUNCH_TAGS}",
-                    indexExistingFiles: true,
-                    results: [[path: 'allure-results']]
-                ) {
-                    sh '''
-                        export PATH="$HOME/.local/bin:$PATH"
-                        python3 -m pytest ${TEST_PATH} --alluredir=allure-results
-                    '''
+                script {
+                    def launchTags = params.TESTS_BRANCH == 'main'
+                        ? 'annotation-demo, unit, plain'
+                        : 'annotation-demo, unit, annotated'
+
+                    withAllureUpload(
+                        credentialsId: 'Amir-Demo.test.cloud',
+                        name: "${JOB_NAME} - #${BUILD_NUMBER}",
+                        projectId: '4601',
+                        serverId: '4601@Demo.testops.cloud',
+                        tags: launchTags,
+                        indexExistingFiles: true,
+                        results: [[path: 'allure-results']]
+                    ) {
+                        sh '''
+                            export PATH="$HOME/.local/bin:$PATH"
+                            python3 -m pytest tests/api_annotation_demo tests/e2e_annotation_demo --alluredir=allure-results
+                        '''
+                    }
                 }
             }
         }
