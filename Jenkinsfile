@@ -34,7 +34,7 @@ pipeline {
                     name: "${JOB_NAME} - #${BUILD_NUMBER}",
                     projectId: '4601',
                     serverId: '4601@Demo.testops.cloud',
-                    tags: "jenkins, api, e2e, manual, ${params.BROWSER}, ${params.OS}, ${params.RELEASE}",
+                    tags: "jenkins, api, e2e, manual",
                     indexExistingFiles: true,
                     results: [[path: 'allure-results']]
                 ) {
