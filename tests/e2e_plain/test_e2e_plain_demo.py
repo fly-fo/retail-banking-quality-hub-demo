@@ -1,18 +1,56 @@
-def test_transfer_portal_plain_001():
+import allure
+
+
+@allure.title("Validate domestic transfer portal journey")
+def test_transfer_portal_basic_001():
+    with allure.step("Open transfer page"):
+        pass
+    with allure.step("Enter valid transfer data"):
+        pass
+    with allure.step("Verify confirmation is shown"):
+        pass
     assert True
 
 
-def test_beneficiary_portal_plain_002():
+@allure.title("Validate beneficiary creation portal journey")
+def test_beneficiary_portal_basic_002():
+    with allure.step("Open beneficiary page"):
+        pass
+    with allure.step("Create beneficiary with valid data"):
+        pass
+    with allure.step("Verify creation confirmation"):
+        pass
     assert True
 
 
-def test_card_portal_plain_003():
+@allure.title("Validate card control portal journey")
+def test_card_portal_basic_003():
+    with allure.step("Open card controls"):
+        pass
+    with allure.step("Block or unblock debit card"):
+        pass
+    with allure.step("Verify card status update"):
+        pass
     assert True
 
 
-def test_statement_portal_plain_004():
+@allure.title("Validate statement download portal journey")
+def test_statement_portal_basic_004():
+    with allure.step("Open statements page"):
+        pass
+    with allure.step("Download monthly statement"):
+        pass
+    with allure.step("Verify statement availability"):
+        pass
     assert True
 
 
-def test_transfer_confirmation_plain_005():
+@allure.title("Validate transfer confirmation portal journey")
+def test_transfer_confirmation_basic_005():
+    with allure.step("Submit transfer"):
+        pass
+    with allure.step("Open confirmation screen"):
+        pass
+    with allure.step("Validate confirmation details"):
+        pass
     assert True

@@ -4,9 +4,8 @@ pipeline {
     }
 
     parameters {
-        string(name: 'BROWSER', defaultValue: 'Chrome', description: 'Browser name')
-        string(name: 'OS', defaultValue: 'Linux', description: 'Operating system')
-        string(name: 'RELEASE', defaultValue: '33.3.1', description: 'Release version')
+        string(name: 'TEST_PATH', defaultValue: 'tests/api_basic tests/e2e_basic', description: 'Paths to run')
+        string(name: 'LAUNCH_TAGS', defaultValue: 'annotation-demo, basic, api, e2e', description: 'Launch tags')
     }
 
     stages {
@@ -27,20 +26,20 @@ pipeline {
             }
         }
 
-        stage('Run tests and upload to Allure TestOps') {
+        stage('Run comparison tests and upload to Allure TestOps') {
             steps {
                 withAllureUpload(
                     credentialsId: 'Amir-Demo.test.cloud',
                     name: "${JOB_NAME} - #${BUILD_NUMBER}",
                     projectId: '4601',
                     serverId: '4601@Demo.testops.cloud',
-                    tags: "jenkins, api, e2e, manual, ${params.BROWSER}, ${params.OS}, ${params.RELEASE}",
+                    tags: "${params.LAUNCH_TAGS}",
                     indexExistingFiles: true,
                     results: [[path: 'allure-results']]
                 ) {
                     sh '''
                         export PATH="$HOME/.local/bin:$PATH"
-                        python3 -m pytest tests/api tests/e2e tests/manual --alluredir=allure-results
+                        python3 -m pytest ${TEST_PATH} --alluredir=allure-results
                     '''
                 }
             }
