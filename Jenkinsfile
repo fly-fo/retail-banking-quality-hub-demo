@@ -6,6 +6,8 @@ pipeline {
     parameters {
         string(name: 'BROWSER', defaultValue: 'Chrome', description: '')
         string(name: 'OS', defaultValue: 'Linux', description: '')
+        string(name: 'RELEASE', defaultValue: '33.3.1', description: '')
+
     }
 
     stages {
