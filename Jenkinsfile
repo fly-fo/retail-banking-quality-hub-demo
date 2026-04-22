@@ -1,31 +1,20 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.11-slim'
-            args '-u root:root'
-        }
-    }
-
-    environment {
-        ALLURE_ENDPOINT = 'https://demo.testops.cloud'
-        ALLURE_PROJECT_ID = '4601'
-        ALLURE_RESULTS = 'allure-results'
-        ALLURE_LAUNCH_NAME = 'retail-banking-quality-hub-demo-jenkins'
-        ALLURE_TOKEN = credentials('ALLURE_TOKEN')
+        label 'python'
     }
 
     stages {
-        stage('Checkout') {
+        stage('git pull') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/fly-fo/retail-banking-quality-hub-demo.git'
             }
         }
 
-        stage('Setup Python') {
+        stage('Setup Python env') {
             steps {
                 sh '''
-                    python --version
-                    python -m venv .venv
+                    python3 --version || python --version
+                    python3 -m venv .venv || python -m venv .venv
                     . .venv/bin/activate
                     python -m pip install --upgrade pip
                     pip install -r requirements.txt
@@ -33,31 +22,29 @@ pipeline {
             }
         }
 
-        stage('Install curl') {
+        stage('Run tests and upload to Allure TestOps') {
             steps {
-                sh '''
-                    apt-get update
-                    apt-get install -y curl
-                '''
+                withAllureUpload(
+                    credentialsId: 'Amir-Demo.test.cloud',
+                    name: "${JOB_NAME} - #${BUILD_NUMBER}",
+                    projectId: '4601',
+                    serverId: '4601@Demo.testops.cloud',
+                    tags: 'jenkins, api, e2e, manual',
+                    indexExistingFiles: true,
+                    results: [[path: 'allure-results']]
+                ) {
+                    sh '''
+                        . .venv/bin/activate
+                        pytest tests/api tests/e2e tests/manual --alluredir=allure-results
+                    '''
+                }
             }
         }
+    }
 
-        stage('Install allurectl') {
-            steps {
-                sh '''
-                    curl -fsSL https://github.com/allure-framework/allurectl/releases/latest/download/allurectl_linux_amd64 -o allurectl
-                    chmod +x allurectl
-                '''
-            }
-        }
-
-        stage('Run API + E2E + Manual') {
-            steps {
-                sh '''
-                    . .venv/bin/activate
-                    ./allurectl watch -- pytest tests/api tests/e2e tests/manual --alluredir="$ALLURE_RESULTS"
-                '''
-            }
+    post {
+        always {
+            cleanWs()
         }
     }
 }
