@@ -16,11 +16,15 @@ def test_beneficiary_creation_001():
     allure.dynamic.label("Service Level 2", "Beneficiaries")
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
-    with allure.step("Send beneficiary creation request"):
-        pass
+    with allure.step("Prepare beneficiary creation payload"):
+        request_payload = {"beneficiary": "John Smith", "iban": "RS35260005601001611379"}
+
+    with allure.step("Validate request payload"):
+        assert request_payload["beneficiary"] == "John Smith"
+
     with allure.step("Validate successful response"):
-        pass
-    assert True
+        response_status = 201
+        assert response_status == 201
 
 
 @allure.id("21451")
@@ -38,11 +42,15 @@ def test_domestic_transfer_002():
     allure.dynamic.label("Service Level 2", "Transfers")
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
-    with allure.step("Send domestic transfer request"):
-        pass
+    with allure.step("Prepare domestic transfer payload"):
+        request_payload = {"amount": 1500, "currency": "EUR"}
+
+    with allure.step("Validate transfer amount"):
+        assert request_payload["amount"] > 0
+
     with allure.step("Validate successful response"):
-        pass
-    assert True
+        response_status = 200
+        assert response_status == 200
 
 
 @allure.id("21458")
@@ -60,11 +68,14 @@ def test_card_status_update_003():
     allure.dynamic.label("Service Level 2", "Cards")
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
-    with allure.step("Send card status update request"):
-        pass
+    with allure.step("Request card status update"):
+        current_status = "BLOCKED"
+        expected_status = "ACTIVE"
+
     with allure.step("Validate updated status response"):
-        pass
-    assert True
+        assert current_status == expected_status, (
+            f"Card status mismatch: expected '{expected_status}', but got '{current_status}'"
+        )
 
 
 @allure.id("21452")
@@ -83,10 +94,12 @@ def test_statement_generation_004():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Request monthly statement generation"):
-        pass
+        statement_month = "2026-03"
+        generated = True
+
     with allure.step("Validate statement generation response"):
-        pass
-    assert True
+        assert statement_month == "2026-03"
+        assert generated is True
 
 
 @allure.id("21450")
@@ -105,7 +118,9 @@ def test_transfer_review_005():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Request transfer review data"):
-        pass
+        review_data = {"payer": "Retail Customer", "payee": "Utility Provider", "amount": 200}
+
     with allure.step("Validate review response fields"):
-        pass
-    assert True
+        response_status = 200
+        assert review_data["amount"] == 200
+        assert response_status == 200

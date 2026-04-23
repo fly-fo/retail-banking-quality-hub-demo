@@ -17,12 +17,16 @@ def test_transfer_portal_001():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Open transfer page"):
-        pass
+        page_opened = True
+        assert page_opened is True
+
     with allure.step("Enter valid transfer data"):
-        pass
+        transfer_entered = True
+        assert transfer_entered is True
+
     with allure.step("Verify confirmation is shown"):
-        pass
-    assert True
+        confirmation_visible = True
+        assert confirmation_visible is True
 
 
 @allure.id("21457")
@@ -41,12 +45,16 @@ def test_beneficiary_portal_002():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Open beneficiary page"):
-        pass
+        page_opened = True
+        assert page_opened is True
+
     with allure.step("Create beneficiary with valid data"):
-        pass
+        beneficiary_created = True
+        assert beneficiary_created is True
+
     with allure.step("Verify creation confirmation"):
-        pass
-    assert True
+        confirmation_visible = True
+        assert confirmation_visible is True
 
 
 @allure.id("21459")
@@ -65,12 +73,17 @@ def test_card_portal_003():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Open card controls"):
-        pass
-    with allure.step("Block or unblock debit card"):
-        pass
+        page_opened = True
+        assert page_opened is True
+
+    with allure.step("Trigger unblock action"):
+        actual_status = "Card remains blocked after unblock action"
+        expected_status = "Card is active after unblock action"
+
     with allure.step("Verify card status update"):
-        pass
-    assert True
+        assert actual_status == expected_status, (
+            f"Portal card control failed: expected '{expected_status}', but got '{actual_status}'"
+        )
 
 
 @allure.id("21455")
@@ -89,12 +102,16 @@ def test_statement_portal_004():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Open statements page"):
-        pass
+        statements_page_opened = True
+        assert statements_page_opened is True
+
     with allure.step("Download monthly statement"):
-        pass
+        pdf_downloaded = True
+        assert pdf_downloaded is True
+
     with allure.step("Verify statement availability"):
-        pass
-    assert True
+        statement_visible = True
+        assert statement_visible is True
 
 
 @allure.id("21456")
@@ -113,9 +130,13 @@ def test_transfer_confirmation_005():
     allure.dynamic.label("Application Unit", "UA-Digital-Banking-Portal")
 
     with allure.step("Submit transfer"):
-        pass
+        transfer_submitted = True
+        assert transfer_submitted is True
+
     with allure.step("Open confirmation screen"):
-        pass
+        confirmation_screen_opened = True
+        assert confirmation_screen_opened is True
+
     with allure.step("Validate confirmation details"):
-        pass
-    assert True
+        confirmation_details_visible = True
+        assert confirmation_details_visible is True
