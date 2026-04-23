@@ -1,46 +1,39 @@
-import allure
-
-
-@allure.title("Validate beneficiary creation API request")
 def test_beneficiary_creation_001():
-    with allure.step("Send beneficiary creation request"):
-        pass
-    with allure.step("Validate successful response"):
-        pass
-    assert True
+    request_payload = {"beneficiary": "John Smith", "iban": "RS35260005601001611379"}
+    response_status = 201
+
+    assert request_payload["beneficiary"] == "John Smith"
+    assert response_status == 201
 
 
-@allure.title("Validate domestic transfer API request")
 def test_domestic_transfer_002():
-    with allure.step("Send domestic transfer request"):
-        pass
-    with allure.step("Validate successful response"):
-        pass
-    assert True
+    request_payload = {"amount": 1500, "currency": "EUR"}
+    response_status = 200
+
+    assert request_payload["amount"] > 0
+    assert response_status == 200
 
 
-@allure.title("Validate card status update API request")
 def test_card_status_update_003():
-    with allure.step("Send card status update request"):
-        pass
-    with allure.step("Validate updated status response"):
-        pass
-    assert True
+    current_status = "BLOCKED"
+    expected_status = "ACTIVE"
+
+    assert current_status == expected_status, (
+        f"Card status mismatch: expected '{expected_status}', but got '{current_status}'"
+    )
 
 
-@allure.title("Validate statement generation API request")
 def test_statement_generation_004():
-    with allure.step("Request monthly statement generation"):
-        pass
-    with allure.step("Validate statement generation response"):
-        pass
-    assert True
+    statement_month = "2026-03"
+    generated = True
+
+    assert statement_month == "2026-03"
+    assert generated is True
 
 
-@allure.title("Validate transfer review API request")
 def test_transfer_review_005():
-    with allure.step("Request transfer review data"):
-        pass
-    with allure.step("Validate review response fields"):
-        pass
-    assert True
+    review_data = {"payer": "Retail Customer", "payee": "Utility Provider", "amount": 200}
+    response_status = 200
+
+    assert review_data["amount"] == 200
+    assert response_status == 200
