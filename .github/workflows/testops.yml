@@ -1,4 +1,4 @@
-name: Retail Banking Quality Hub
+name: Unified Quality Hub
 
 on:
   workflow_dispatch:
@@ -32,7 +32,7 @@ env:
   ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
   ALLURE_RESULTS: allure-results
-  ALLURE_LAUNCH_NAME: retail-banking-quality-hub-demo
+  ALLURE_LAUNCH_NAME: unified-quality-hub
   ALLURE_LAUNCH_TAGS: unit, github
 
 jobs:
